@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="clarity_cdn.filemanager.class">Clarity\CdnBundle\Filemanager\Filemanager</parameter>
+        <parameter key="clarity_cdn.factory.class">Clarity\CdnBundle\Filemanager\CdnFactory</parameter>
+        <parameter key="clarity_cdn.twig_extension">Clarity\CdnBundle\Twig\CdnExtension</parameter>
+    </parameters>
+
+    <services>
+        <service id="clarity_cdn.factory" class="%clarity_cdn.factory.class%">
+            <argument type="service" id="service_container" />
+        </service>
+        
+        <service id="clarity_cdn.filemanager" class="%clarity_cdn.filemanager.class%">
+            <argument type="service" id="clarity_cdn.factory" />
+        </service>
+        
+        <service id="cdn" class="%clarity_cdn.twig_extension%">
+            <tag name="twig.extension" />
+            <argument type="service" id="clarity_cdn.filemanager"/>
+        </service>        
+    </services>
+</container>
