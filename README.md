@@ -13,4 +13,4 @@ clarity_cdn:
             schema: "local"
             upload_path: "%kernel.root_dir%/../web/uploads"
             upload_url: "http://your-site-name.net/uploads"
-``` yaml
+```
