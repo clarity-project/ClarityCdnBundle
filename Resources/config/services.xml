@@ -7,7 +7,7 @@
     <parameters>
         <parameter key="clarity_cdn.filemanager.class">Clarity\CdnBundle\Filemanager\Filemanager</parameter>
         <parameter key="clarity_cdn.factory.class">Clarity\CdnBundle\Filemanager\CdnFactory</parameter>
-        <parameter key="clarity_cdn.twig_extension">Clarity\CdnBundle\Twig\CdnExtension</parameter>
+        <parameter key="clarity_cdn.twig_extension">Clarity\CdnBundle\Twig\Extension\CdnExtension</parameter>
     </parameters>
 
     <services>
