@@ -43,7 +43,13 @@ class Container implements ContainerInterface
     public function __construct($name, $path, $uri, $http) 
     {
         $this->name = $name;
-        if (!is_dir($path.DIRECTORY_SEPARATOR.$name) || !is_writable($path.DIRECTORY_SEPARATOR.$name)) {
+        if (!is_dir($path.DIRECTORY_SEPARATOR.$name)) {
+            if (!mkdir($path.DIRECTORY_SEPARATOR.$name) && !chmod($path.DIRECTORY_SEPARATOR.$name, 0777)) {
+                throw new Exception\ContainerAccessException($name, $path);
+            }
+        }
+        
+        if (!is_writable($path.DIRECTORY_SEPARATOR.$name)) {
             throw new Exception\ContainerAccessException($name, $path);
         }
 

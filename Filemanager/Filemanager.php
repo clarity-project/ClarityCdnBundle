@@ -51,22 +51,35 @@ class Filemanager
      * Uploads file by configured path
      * 
      * @param UploadedFile $file
-     * @param string $dimension
-     * @param string $cdnContainer
+     * @param string $container
      * @param string $cdn
-     * @return boolean|ObjectInterface
+     * @param string $dimension
+     * @param string $name
+     * @return ObjectInterface
      */
-    public function upload(UploadedFile $file, $dimension = null, $cdnContainer = null, $cdn = null)
+    public function upload(UploadedFile $file, $container, $cdn = null, $dimension = null, $name = null)
     {
-        $this->cdn = $this->factory->getCdn($cdn);
-        $object = $this->cdn->container($cdnContainer)->save($file, $dimension);
+        $name = (null === $name) ? $file->getClientOriginalName() : $name;
         
-        if (!$object instanceof ObjectInterface) {
-            return false;
+        if (null !== $dimension) {
+            $name = $this->addDimensionToName($name, $dimension);
         }
 
-        $object->setUri($this->factory->composeUriString($object));
-
+        $object = $this->registry->getCdn($cdn)->container($container)->touch($file, $name);
+        
         return $object;
-    }   
+    }
+
+    /**
+     * 
+     * @param string $name
+     * @param string $dimension
+     * @return string
+     */
+    public function addDimensionToName($name, $dimension)
+    {
+        $extension = substr($name, strrpos($name, '.'));
+
+        return str_replace($extension, "@{$dimension}{$extension}", $name);
+    }
 }
