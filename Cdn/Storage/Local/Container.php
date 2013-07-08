@@ -82,26 +82,9 @@ class Container implements ContainerInterface
      */
     public function touch(UploadedFile $file, $name = null)
     {
-        $this->fileName = $file->getBasename();
-        if ($file->getClientOriginalExtension()) 
-        {
-            $this->fileName .= '.' . $file->getClientOriginalExtension();
-        }
+        $name = (null === $name) ? $file->getClientOriginalName() : ? $name;
+        $file->move($this->path, $name);
         
-        $this->originalFileName = $this->fileName;
-        
-        if ($dimension) {
-            $this->fileName .= self::$delimiter . $dimension;
-        }
-        
-        $file->move($this->fullPath, $this->fileName);
-        $this->path = $this->fullPath . '/' . $this->fileName;
-        $this->url = $this->uploadUrl . '/' . $this->container . '/' . $this->fileName;
-        
-        if (!is_file($this->path)) {
-            return false;
-        }
-        
-        return new Object($this->url, $this->path, $this->container, $this->originalFileName);
+        return $this->get($name);
     }
 }
