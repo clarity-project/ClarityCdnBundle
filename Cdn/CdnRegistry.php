@@ -51,7 +51,7 @@ class CdnRegistry
 
         if (!isset($this->storages[$name])) {
             if (!isset($this->configuration['storage'][$name])) {
-                throw Exception\ConfigurationNotFoundException($name);
+                throw new Exception\ConfigurationNotFoundException($name);
             }
             $config = $this->configuration['storage'][$name];
             $scheme = $this->scheme($config['scheme']);

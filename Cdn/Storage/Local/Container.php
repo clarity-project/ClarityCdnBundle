@@ -54,7 +54,7 @@ class Container implements ContainerInterface
         }
 
         $this->path = $path.DIRECTORY_SEPARATOR.$name;
-        $this->uri  = "{$uri}/{$name}";
+        $this->uri  = $uri.$name;
         $this->http  = "{$http}/{$name}";
     }
 
@@ -82,7 +82,7 @@ class Container implements ContainerInterface
      */
     public function touch(UploadedFile $file, $name = null)
     {
-        $name = (null === $name) ? $file->getClientOriginalName() : ? $name;
+        $name = (null === $name) ? $file->getClientOriginalName() : $name;
         $file->move($this->path, $name);
         
         return $this->get($name);
