@@ -1,7 +1,7 @@
 {
     "name": "clarity-project/cdn-bundle",
     "description": "Symfony2 bundle for file storage on local or remote cdn",
-    "keywords": ["cdn", "symfony", "filemanager", "file", "upload", "storage", "container"],
+    "keywords": ["cdn", "php", "symfony", "symfony2", "filemanager", "file", "upload", "storage", "container"],
     "license": "MIT",
     "authors": [
         {
