@@ -34,6 +34,7 @@ class CdnRegistry
     {
         $params = $this->parse($uri);
         $cdn = $this->getCdn($params['scheme']);
+        die(var_dump($cdn));
         $object = $cdn->container($params['host'])->get($params['path']);
 
         return $object;
@@ -55,8 +56,7 @@ class CdnRegistry
             }
             $config = $this->configuration['storage'][$name];
             $scheme = $this->scheme($config['scheme']);
-            die(var_dump($scheme));
-
+            $this->storages[$name] = new $scheme($config['path'], $config['url']);;
         }
 
         return $this->storages[$name];

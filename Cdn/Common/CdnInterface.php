@@ -14,5 +14,5 @@ interface CdnInterface
      * @param string $name
      * @return ContainerInterface
      */    
-    public function container($name = null);
+    public function container($name);
 }

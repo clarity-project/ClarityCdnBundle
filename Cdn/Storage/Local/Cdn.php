@@ -11,23 +11,32 @@ use Clarity\CdnBundle\Cdn\Common\CdnInterface;
 class Cdn implements CdnInterface
 {
     /**
-     * Constructor
-     * 
-     * @param array $config
+     * @var string
      */
-    public function __construct($path)
+    private $path;
+
+    /**
+     * @var string
+     */
+    private $uri;
+
+    /**
+     * 
+     * @param string $path
+     * @param string $uri
+     */
+    public function __construct($path, $uri)
     {
         $this->path = $path;
+        $this->uri = $uri;
     }
 
     /**
-     * Returns default or nedded container
-     * 
      * @param string $name
      * @return Container
      */
     public function container($name) 
     {
-        return new Container($name, $this->path);
+        return new Container($name, $this->path, $this->uri);
     }
 }
