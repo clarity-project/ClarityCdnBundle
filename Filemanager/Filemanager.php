@@ -29,29 +29,22 @@ class Filemanager
     }
     
     /**
-     * Returns file object by uri schema
      * 
      * @param string $uri
-     * @param string $dimension
      * @return ObjectInterface
      */
     public function get($uri, $dimension = null)
     {
-        $params = $this->factory->parseUriString($uri);
-        return $this->factory->getCdn($params['schema'])->container()->get($params['path'], $dimension);
+        return $this->registry->get($uri);
     }
     
     /**
-     * Removes file by uri schema
-     * 
      * @param string $uri
-     * @param string $dimension
      * @return boolean
      */
-    public function remove($uri, $dimension = null)
+    public function remove($uri)
     {
-        $params = $this->factory->parseUriString($uri);
-        return $this->factory->getCdn($params['schema'])->container()->remove($params['path'], $dimension);
+        return $this->get($uri)->remove();
     }
     
     /**

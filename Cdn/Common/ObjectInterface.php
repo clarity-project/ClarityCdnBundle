@@ -34,4 +34,9 @@ interface ObjectInterface
      * @return string
      */
     public function getDimension();
+    
+    /**
+     * @return boolean 
+     */
+    public function remove();
 }

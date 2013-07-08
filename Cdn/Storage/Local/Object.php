@@ -20,7 +20,7 @@ class Object implements ObjectInterface
     }
 
     /**
-     * @return string
+     * {@inheritDoc}
      */
     public function getUri()
     {
@@ -28,7 +28,7 @@ class Object implements ObjectInterface
     }
 
     /**
-     * @return string
+     * {@inheritDoc}
      */
     public function getHttpUri()
     {
@@ -36,7 +36,7 @@ class Object implements ObjectInterface
     }
 
     /**
-     * @return string
+     * {@inheritDoc}
      */
     public function getPath()
     {
@@ -44,7 +44,7 @@ class Object implements ObjectInterface
     }
 
     /**
-     * @return string
+     * {@inheritDoc}
      */
     public function getName()
     {
@@ -52,10 +52,19 @@ class Object implements ObjectInterface
     }
 
     /**
-     * @return string
+     * {@inheritDoc}
      */
     public function getDimension()
     {
         return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function remove()
+    {
+        die(var_dump('asdfasdf'));
+        return false;
     }
 }
