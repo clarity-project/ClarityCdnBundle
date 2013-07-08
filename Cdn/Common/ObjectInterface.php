@@ -33,7 +33,7 @@ interface ObjectInterface
     /**
      * @return string
      */
-    public function getDimension();
+    public function getExtension();
     
     /**
      * @return boolean 

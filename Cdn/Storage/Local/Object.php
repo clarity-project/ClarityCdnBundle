@@ -19,6 +19,7 @@ class Object implements ObjectInterface
     public function __construct($name, $path, $uri, $http)
     {
         $this->name = $name;
+
         if (!is_file($path.DIRECTORY_SEPARATOR.$name) || !is_readable($path.DIRECTORY_SEPARATOR.$name)) {
             throw new Exception\ObjectAccessException($path.DIRECTORY_SEPARATOR.$name);
         }
@@ -49,7 +50,7 @@ class Object implements ObjectInterface
      */
     public function getHttpUri()
     {
-        return $this->httpUri;
+        return $this->http;
     }
 
     /**
@@ -71,17 +72,12 @@ class Object implements ObjectInterface
     /**
      * {@inheritDoc}
      */
-    public function getDimension()
-    {
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function remove()
     {
-        die(var_dump('asdfasdf'));
+        if (unlink($this->path)) {
+            return true;
+        }
+
         return false;
     }
 }
