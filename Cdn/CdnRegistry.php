@@ -55,7 +55,7 @@ class CdnRegistry
             }
             $config = $this->configuration['storage'][$name];
             $scheme = $this->scheme($config['scheme']);
-            $this->storages[$name] = new $scheme($config['path'], $config['url']);;
+            $this->storages[$name] = new $scheme($config['path'], "$name://", $config['url']);
         }
 
         return $this->storages[$name];
