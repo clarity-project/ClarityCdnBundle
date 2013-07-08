@@ -1,26 +1,31 @@
 <?php
+
 namespace Clarity\CdnBundle\Filemanager;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Clarity\CdnBundle\Filemanager\CdnFactory;
-use Clarity\CdnBundle\Filemanager\Common\ObjectInterface;
+use Clarity\CdnBundle\Cdn\CdnRegistry;
+use Clarity\CdnBundle\Cdn\Common\ObjectInterface;
 
 /**
- * Filemanager class
  * 
  * @author nikita prokurat <nickpro@tut.by>
+ * @author Zmicier Aliakseyeu <z.aliakseyeu@gmail.com>
  */
 class Filemanager
 {
-    protected $cdn;
+    /**
+     * 
+     * @var CdnRegistry
+     */
+    protected $registry;
     
     /**
-     * Constructor
      * 
-     * @param CdnFactory $factory
+     * @param CdnRegistry $registry
      */
-    public function __construct(CdnFactory $factory) {
-        $this->factory = $factory;
+    public function __construct(CdnRegistry $registry)
+    {
+        $this->registry = $registry;
     }
     
     /**

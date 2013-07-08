@@ -8,6 +8,19 @@ namespace Clarity\CdnBundle\Cdn;
 class CdnRegistry
 {
     /**
+     * @var array
+     */
+    private $configuration;
+
+    /**
+     * @param array $configuration
+     */
+    public function __construct(array $configuration)
+    {
+        $this->configuration = $configuration;
+    }
+
+    /**
      * @param  string $name
      * @return Common\CdnInterface
      */

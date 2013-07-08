@@ -26,5 +26,8 @@ class ClarityCdnExtension extends Extension
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
+
+        $container->getDefinition('clarity_cdn.registry')
+            ->replaceArgument(0, $container->getParameter('clarity_cdn'));
     }
 }
