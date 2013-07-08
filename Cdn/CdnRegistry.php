@@ -34,7 +34,6 @@ class CdnRegistry
     {
         $params = $this->parse($uri);
         $cdn = $this->getCdn($params['scheme']);
-        die(var_dump($cdn));
         $object = $cdn->container($params['host'])->get($params['path']);
 
         return $object;

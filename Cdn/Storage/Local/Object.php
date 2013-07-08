@@ -3,6 +3,7 @@
 namespace Clarity\CdnBundle\Cdn\Storage\Local;
 
 use Clarity\CdnBundle\Cdn\Common\ObjectInterface;
+use Clarity\CdnBundle\Cdn\Exception;
 
 /**
  * @author Zmicier Aliakseyeu <z.aliakseyeu@gmail.com>
@@ -11,12 +12,28 @@ class Object implements ObjectInterface
 {
     /**
      * @param string $name
-     * @param string $containerPath
-     * @param string $containerUri
+     * @param string $path
+     * @param string $uri
+     * @param string $http
      */
-    public function __construct($name, $containerPath, $containerUri)
+    public function __construct($name, $path, $uri, $http)
     {
-        
+        $this->name = $name;
+        if (!is_file($path.DIRECTORY_SEPARATOR.$name) || !is_readable($path.DIRECTORY_SEPARATOR.$name)) {
+            throw new Exception\ObjectAccessException($path.DIRECTORY_SEPARATOR.$name);
+        }
+
+        $this->path = $path.DIRECTORY_SEPARATOR.$name;
+        $this->uri  = "{$uri}/{$name}";
+        $this->http  = "{$http}/{$name}";
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->http;
     }
 
     /**

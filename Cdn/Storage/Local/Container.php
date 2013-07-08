@@ -4,6 +4,7 @@ namespace Clarity\CdnBundle\Cdn\Storage\Local;
 
 use Clarity\CdnBundle\Cdn\Common\ContainerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Clarity\CdnBundle\Cdn\Exception;
 
 /**
  * 
@@ -11,29 +12,64 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @author Zmicier Aliakseyeu <z.aliakseyeu@gmail.com>
  */
 class Container implements ContainerInterface
-{    
+{
+    /**
+     * @var string
+     */
+    private $name;
+
+    /**
+     * @var string
+     */
+    private $path;
+
+    /**
+     * @var string
+     */
+    private $uri;
+
+    /**
+     * @var string http address
+     */
+    private $http;
+
     /**
      * 
-     * @param string $container
-     * @param array $config
+     * @param string $name
+     * @param string $path
+     * @param string $uri
+     * @param string $http address of the server path
      */
-    public function __construct($name) 
+    public function __construct($name, $path, $uri, $http) 
     {
-        $this->config = $config;
-        $this->container = $container ? $container : self::$defaultContainer;
-        $this->uploadPath = $config['upload_path'];
-        $this->uploadUrl = $config['upload_url'];
-        $this->fullPath = str_replace("//", "/", $this->uploadPath . "/" . $this->container);
+        $this->name = $name;
+        if (!is_dir($path.DIRECTORY_SEPARATOR.$name) || !is_writable($path.DIRECTORY_SEPARATOR.$name)) {
+            throw new Exception\ContainerAccessException($name, $path);
+        }
+
+        $this->path = $path.DIRECTORY_SEPARATOR.$name;
+        $this->uri  = "{$uri}/{$name}";
+        $this->http  = "{$http}/{$name}";
+    }
+
+    /**
+     * 
+     * @param string $name
+     * @return Object
+     */
+    public function get($name) 
+    {
+        return new Object($name, $this->path, $this->uri, $this->http);
     }
     
     /**
      * 
      * @param UploadedFile $file
-     * @param string $name
+     * @param string $name custom file name
      * @return ObjectInterface
      */
-    public function create(UploadedFile $file, $name = null)
-    {   
+    public function touch(UploadedFile $file, $name = null)
+    {
         $this->fileName = $file->getBasename();
         if ($file->getClientOriginalExtension()) 
         {
@@ -55,28 +91,6 @@ class Container implements ContainerInterface
         }
         
         return new Object($this->url, $this->path, $this->container, $this->originalFileName);
-    }
-    
-    /**
-     * Returns file object with absolute path and url
-     * 
-     * @param string $path
-     * @param string $dimension
-     * @return boolean|Object
-     */
-    public function get($path, $dimension = null) 
-    {
-        if ($dimension) {
-            $path .= static::$delimiter . $dimension;
-        }
-        $this->path = $this->uploadPath . '/' . $path;
-        $this->url = $this->uploadUrl . '/' . $path;
-        
-        if (!is_file($this->path)) {
-            return false;
-        }
-        
-        return new Object($this->url, $this->path);
     }
     
     /**

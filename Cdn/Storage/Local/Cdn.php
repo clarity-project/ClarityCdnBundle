@@ -21,14 +21,21 @@ class Cdn implements CdnInterface
     private $uri;
 
     /**
+     * @var string http adress
+     */
+    private $http;
+
+    /**
      * 
      * @param string $path
      * @param string $uri
+     * @param string $http http server address
      */
-    public function __construct($path, $uri)
+    public function __construct($path, $uri, $http)
     {
         $this->path = $path;
         $this->uri = $uri;
+        $this->http = $http;
     }
 
     /**
@@ -37,6 +44,6 @@ class Cdn implements CdnInterface
      */
     public function container($name) 
     {
-        return new Container($name, $this->path, $this->uri);
+        return new Container($name, $this->path, $this->uri, $this->http);
     }
 }
