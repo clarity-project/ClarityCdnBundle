@@ -11,6 +11,31 @@ use Clarity\CdnBundle\Cdn\Exception;
 class Object implements ObjectInterface
 {
     /**
+     * @var string
+     */
+    private $path;
+
+    /**
+     * @var string
+     */
+    private $name;
+
+    /**
+     * @var string
+     */
+    private $uri;
+
+    /**
+     * @var string
+     */
+    private $http;
+
+    /**
+     * @var string
+     */
+    private $extension;
+
+    /**
      * @param string $name
      * @param string $path
      * @param string $uri
@@ -67,6 +92,18 @@ class Object implements ObjectInterface
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getExtension()
+    {
+        if (null === $this->extension) {
+            $this->extension = substr($this->name, strrpos($this->name, '.')+1);
+        }
+
+        return $this->extension;
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace Clarity\CdnBundle\Filemanager\Common;
+namespace Clarity\CdnBundle\Cdn\Common;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 

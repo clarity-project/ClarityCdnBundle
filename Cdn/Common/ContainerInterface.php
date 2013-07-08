@@ -11,13 +11,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 interface ContainerInterface
 {
     /**
-     * @param  UploadedFile $file
-     * @param  string       $name
-     * @return ObjectInterface
-     */
-    public function create(UploadedFile $file, $name = null);
-
-    /**
      * @param  string $name
      * @return ObjectInterface
      */
@@ -28,4 +21,13 @@ interface ContainerInterface
      * @return boolean
      */
     public function remove($name);
+
+    /**
+     * @param  UploadedFile $file
+     * @param  string       $name
+     * @return ObjectInterface
+     */
+    public function touch(UploadedFile $file, $name = null);
+
+    
 }

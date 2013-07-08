@@ -53,13 +53,19 @@ class Container implements ContainerInterface
     }
 
     /**
-     * 
-     * @param string $name
-     * @return Object
+     * {@inheritDoc}
      */
     public function get($name) 
     {
         return new Object($name, $this->path, $this->uri, $this->http);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function remove($name)
+    {
+        return $this->get($name)->remove();
     }
     
     /**
@@ -91,26 +97,5 @@ class Container implements ContainerInterface
         }
         
         return new Object($this->url, $this->path, $this->container, $this->originalFileName);
-    }
-    
-    /**
-     * Removes file from filesystem
-     * 
-     * @param string $path
-     * @param string $dimension
-     * @return boolean
-     */
-    public function remove($path, $dimension = null)
-    {
-        if ($dimension) {
-            $path .= static::$delimiter . $dimension;
-        }
-        $file = $this->uploadPath . '/' . $path;
-        @unlink($file);
-        
-        if (is_file($file)) {
-            return false;
-        }
-        return true;
     }
 }
