@@ -6,17 +6,17 @@
 
     <parameters>
         <parameter key="clarity_cdn.filemanager.class">Clarity\CdnBundle\Filemanager\Filemanager</parameter>
-        <parameter key="clarity_cdn.factory.class">Clarity\CdnBundle\Filemanager\CdnFactory</parameter>
+        <parameter key="clarity_cdn.registry.class">Clarity\CdnBundle\Cdn\CdnRegistry</parameter>
         <parameter key="clarity_cdn.twig_extension">Clarity\CdnBundle\Twig\Extension\CdnExtension</parameter>
     </parameters>
 
     <services>
-        <service id="clarity_cdn.factory" class="%clarity_cdn.factory.class%">
-            <argument type="service" id="service_container" />
+        <service id="clarity_cdn.registry" class="%clarity_cdn.registry.class%">
+            <argument /> <!-- will be replaced with configuration -->
         </service>
         
         <service id="clarity_cdn.filemanager" class="%clarity_cdn.filemanager.class%">
-            <argument type="service" id="clarity_cdn.factory" />
+            <argument type="service" id="clarity_cdn.registry" />
         </service>
         
         <service id="cdn" class="%clarity_cdn.twig_extension%">
