@@ -11,11 +11,11 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  * @author Zmicier Aliakseyeu <z.aliakseyeu@gmail.com>
  */
 class ClarityCdnBundle extends Bundle
-{	
-	/**
-	 * {@inheritDoc}
-	 */
-	public function build(ContainerBuilder $container)
+{   
+    /**
+     * {@inheritDoc}
+     */
+    public function build(ContainerBuilder $container)
     {
         parent::build($container);
 
