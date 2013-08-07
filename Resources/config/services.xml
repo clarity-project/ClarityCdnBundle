@@ -12,7 +12,7 @@
 
     <services>
         <service id="clarity_cdn.registry" class="%clarity_cdn.registry.class%">
-            <argument /> <!-- will be replaced with configuration -->
+            <argument>%clarity_cdn%</argument>
         </service>
         
         <service id="clarity_cdn.filemanager" class="%clarity_cdn.filemanager.class%">
