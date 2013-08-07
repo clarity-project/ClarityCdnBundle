@@ -5,12 +5,10 @@ Put this in your configuration file
 
 ``` yaml
 clarity_cdn:
-    default_storage: "image"
-    schemas:
-        local: "Clarity\CdnBundle\Filemanager\Storage\\Local\Cdn"
-    storages:
+    default: "image"
+    storage:
         image:
-            schema: "local"
-            upload_path: "%kernel.root_dir%/../web/uploads"
-            upload_url: "http://your-site-name.net/uploads"
+            scheme: "local"
+            path: "%kernel.root_dir%/../web/images"
+            url: "http://example-site.com/images"
 ```
