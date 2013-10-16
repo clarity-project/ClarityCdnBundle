@@ -12,9 +12,9 @@ Nice to see you learning our ClarityCdnBundle - stores media simple and flexible
 
 ## Installation
 
-### Step 1) Get the bundle and the library
+### Step 1) Get the bundle
 
-#### Simply using composer to install vendor (symfony 2.1 pattern)
+#### Simply using composer to install bundle (symfony from 2.1 way)
 
     "require" :  {
         // ...
@@ -22,14 +22,14 @@ Nice to see you learning our ClarityCdnBundle - stores media simple and flexible
         // ...
     }
 
-You can try to install ClarityCdnBundle with `deps` file (symfony 2.0 way) [Symfony doc](http://symfony.com/doc/2.0/cookbook/workflow/new_project_git.html#managing-vendor-libraries-with-bin-vendors-and-deps), 
-or like submodule with `git` functionality [Git doc](http://git-scm.com/book/en/Git-Tools-Submodules#Starting-with-Submodules).
-But it's not tested! If you cat do it - just send approve to us or fork and edit this documentation.
+You can try to install ClarityCdnBundle with `deps` file (symfony 2.0 way) like here -  [Symfony doc](http://symfony.com/doc/2.0/cookbook/workflow/new_project_git.html#managing-vendor-libraries-with-bin-vendors-and-deps), 
+or with help of `git submodule` functionality - [Git doc](http://git-scm.com/book/en/Git-Tools-Submodules#Starting-with-Submodules).
+But it's not tested ways! If you cat do it - just send approve to us, or fork and edit this documentation to solve our doubts =)
 
 ### Step 2) Register the namespaces
 
-If you install bundle via composer, use the created autoload.php file and skip this step.
-Else you may need to register next namespace manualy
+If you install bundle via composer, use the auto generated autoload.php file and skip this step.
+Else you may need to register next namespace manualy:
 
 ``` php
 <?php
@@ -61,8 +61,8 @@ public function registerBundles()
 
 ### Step 4) Configure the bundle
 
-Now you need to configure bundle and create config section.
-Here is configuration of storages and storage by default.
+Now, you need to create config section for bundle.
+Here is configuration of storages and storage used by default.
 
 ``` yaml
 clarity_cdn:
