@@ -175,3 +175,13 @@ use Acme\DemoBundle\Entity\Document;
     }
     // ...
 ```
+
+#### In twig.
+
+You can get your file path:
+
+``` html+jinja
+
+<img src="{{ clarity_cdn(document.path) }}"/>
+
+```
