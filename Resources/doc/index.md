@@ -7,6 +7,7 @@ Nice to see you learning our ClarityCdnBundle - stores media simple and flexible
 
 * [Installation](#installation)
 * [Usage](#usage)
+* [Twig](#twig)
 
 <a name="installation"></a>
 
@@ -174,4 +175,13 @@ use Acme\DemoBundle\Entity\Document;
         return array('form' => $form->createView());
     }
     // ...
+```
+<a name="twig"></a>
+
+#### In twig:
+
+You can get your http uri:
+
+``` html+jinja
+    {{ clarity_cdn(document.path) }}
 ```
