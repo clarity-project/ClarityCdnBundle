@@ -126,6 +126,22 @@ class Document
     {
         return $this->file;
     }
+
+    /**
+     * @param string $path
+     */
+    public function setPath($path)
+    {
+        $this->path = $path;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
 }
 ```
 
@@ -149,22 +165,29 @@ use Acme\DemoBundle\Entity\Document;
     {
         $document = new Document();
         $form = $this->createFormBuilder($document)
-            ->add('name')
-            ->add('file')
+            ->add('file', 'file')
             ->getForm();
 
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+
+            /** @var \Clarity\CdnBundle\Filemanager\Filemanager $filemanager **/
             $filemanager = $this->container->get('clarity_cdn.filemanager');
 
             try {
-                $filemanager->upload($document->getFile());
+                /** @var \Clarity\CdnBundle\Cdn\Common\ObjectInterface $object **/
+                $object = $filemanager->upload(
+                    $document->getFile(),
+                    'upload_here_subpath', // Not required sub directory to upload file in it, can be generated
+                    'uploaded_file_name' . '.' . $document->getFile()->getClientOriginalExtension() // Not required name for uploaded file (original filename used by default)
+                );
             } catch (FileException $e) {
                 // Handle error
             }
 
+            $document->setPath($object->getUri()); // Set cdn scheme path like 'local://upload_here_subpath/uploaded_file_name.jpg'
             $em->persist($document);
             $em->flush();
 
@@ -175,3 +198,35 @@ use Acme\DemoBundle\Entity\Document;
     }
     // ...
 ```
+
+### Get uploaded file web path (to use in img src or elsewhere...)
+
+Now you can get uploaded file web path by cdn scheme path, stored in entity property by using `clarity_cdn` twig filter or with filemanager directly
+
+#### Simple twig template example:
+
+``` twig
+    ...
+
+    <img class="thumbnail" src="{{ clarity_cdn(document.path|default('local://noavatar/noavatar.jpg')) }}" width="100" height="100" alt="avatar" title="avatar">
+
+    ...
+```
+
+### Or in controller with help of filemanager service
+
+``` php
+
+    /** @var \Clarity\CdnBundle\Filemanager\Filemanager $filemanager **/
+    $filemanager = $this->container->get('clarity_cdn.filemanager');
+    $uploadedFileWebPath = $filemanager->get($document->getPath());
+
+    // do something with $uploadedFileWebPath ...
+    
+```
+
+================
+
+So this way you can create many storages in config.yml to define different local directories to upload files
+
+... to be Continued
