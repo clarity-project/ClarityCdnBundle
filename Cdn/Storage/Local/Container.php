@@ -44,7 +44,7 @@ class Container implements ContainerInterface
     {
         $this->name = $name;
         if (!is_dir($path.DIRECTORY_SEPARATOR.$name)) {
-            if (!mkdir($path.DIRECTORY_SEPARATOR.$name) && !chmod($path.DIRECTORY_SEPARATOR.$name, 0777)) {
+            if (!mkdir($path.DIRECTORY_SEPARATOR.$name, 0777, true)) {
                 throw new Exception\ContainerAccessException($name, $path);
             }
         }
