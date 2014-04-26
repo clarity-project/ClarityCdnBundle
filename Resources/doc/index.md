@@ -7,6 +7,7 @@ Nice to see you learning our ClarityCdnBundle - stores media simple and flexible
 
 * [Installation](#installation)
 * [Usage](#usage)
+* [Custom storages (advanced)](#storages)
 
 <a name="installation"></a>
 
@@ -229,4 +230,163 @@ Now you can get uploaded file web path by cdn scheme path, stored in entity prop
 
 So this way you can create many storages in config.yml to define different local directories to upload files
 
-... to be Continued
+
+<a name="storages"></a>
+
+## Custom storages
+
+### Step 1) Configure custom shemas to use in storages
+
+Custom shemas can be specified as simple class name or service id.
+
+``` yaml
+# app/config/config.yml
+
+clarity_cdn:
+    schema:
+        custom_schema_service: acme.demo.avatar_cdn
+        custom_schema_class: Acme\DemoBundle\CdnStorage\Image\Cdn
+    default: "avatar"
+    storage:
+        avatar:
+            scheme: "custom_schema_service"
+            path: "%kernel.root_dir%/../web/uploads/avatar"
+            url: "http://example-site.com/uploads/avatar"
+        image:
+            scheme: "custom_schema_class"
+            path: "%kernel.root_dir%/../web/uploads/images"
+            url: "http://example-site.com/uploads/images"
+```
+
+When you use service id for scheme declaration you must configure service first.
+
+``` yaml
+# Acme/DemoBundle/Resources/config/services.yml
+
+services:
+    acme.demo.avatar_cdn:
+        class: Acme\DemoBundle\CdnStorage\Avatar\Cdn
+        # Any other service configurations
+```
+
+### Step 1) Implement custom shema classes. 
+
+#### Custom cdn must implement `Clarity\CdnBundle\Cdn\Common\CdnInterface` or simply extends `Clarity\CdnBundle\Cdn\Storage\AbstractCdnStorage`
+
+
+Simple cdn class example:
+
+``` php
+<?php
+
+namespace Acme\DemoBundle\CdnStorage\Avatar;
+
+use Clarity\CdnBundle\Cdn\Storage\AbstractCdnStorage;
+
+class Cdn extends AbstractCdnStorage
+{
+    /**
+     * @param string $name
+     * @return Container
+     */
+    public function container($name) 
+    {
+        return new Container($name, $this->path, $this->uri, $this->http);
+    }
+}
+```
+
+#### Important! All files processing logic concentrated into container. Custom container class must implements `Clarity\CdnBundle\Cdn\Common\ContainerInterface`
+
+Custom container example (fully duplicate clarity `Clarity\CdnBundle\Cdn\Storage\Local\Container` but you can redeclare any method to implement custom logic):
+
+``` php
+<?php
+
+namespace Acme\DemoBundle\CdnStorage\CdnStorage\Avatar;
+
+use Clarity\CdnBundle\Cdn\Common\ContainerInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Clarity\CdnBundle\Cdn\Exception;
+use Clarity\CdnBundle\Cdn\Storage\Local\Object; // Not nesessary to redeclare base object class, simply use clarity object
+
+class Container implements ContainerInterface
+{
+    /**
+     * @var string
+     */
+    private $name;
+
+    /**
+     * @var string
+     */
+    private $path;
+
+    /**
+     * @var string
+     */
+    private $uri;
+
+    /**
+     * @var string http address
+     */
+    private $http;
+
+    /**
+     * 
+     * @param string $name
+     * @param string $path
+     * @param string $uri
+     * @param string $http address of the server path
+     */
+    public function __construct($name, $path, $uri, $http) 
+    {
+        $this->name = $name;
+        if (!is_dir($path.DIRECTORY_SEPARATOR.$name)) {
+            if (!mkdir($path.DIRECTORY_SEPARATOR.$name) && !chmod($path.DIRECTORY_SEPARATOR.$name, 0777)) {
+                throw new Exception\ContainerAccessException($name, $path);
+            }
+        }
+        
+        if (!is_writable($path.DIRECTORY_SEPARATOR.$name)) {
+            throw new Exception\ContainerAccessException($name, $path);
+        }
+
+        $this->path = $path.DIRECTORY_SEPARATOR.$name;
+        $this->uri  = $uri.$name;
+        $this->http  = "{$http}/{$name}";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function get($name) 
+    {
+        return new Object($name, $this->path, $this->uri, $this->http);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function remove($name)
+    {
+        return $this->get($name)->remove();
+    }
+    
+    /**
+     * 
+     * @param UploadedFile $file
+     * @param string $name custom file name
+     * @return ObjectInterface
+     */
+    public function touch(UploadedFile $file, $name = null)
+    {
+        $name = (null === $name) ? $file->getClientOriginalName() : $name;
+        $file->move($this->path, $name);
+        
+        return $this->get($name);
+    }
+}
+```
+
+Congrats! Now you can create custom cdn storage and use it by default or in some non trivial situations!

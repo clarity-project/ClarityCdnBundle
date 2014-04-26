@@ -2,8 +2,11 @@
 
 namespace Clarity\CdnBundle\Cdn;
 
+use Symfony\Component\DependencyInjection\Reference;
+
 /**
  * @author Zmicier Aliakseyeu <z.aliakseyeu@gmail.com>
+ * @author varloc2000 <varloc2000@gmail.com>
  */
 class CdnRegistry
 {
@@ -11,6 +14,11 @@ class CdnRegistry
      * @var array
      */
     private $configuration;
+
+    /**
+     * @var array
+     */
+    private $schemas;
 
     /**
      * @var array
@@ -24,11 +32,12 @@ class CdnRegistry
     {
         $this->configuration = $configuration;
         $this->storages = array();
+        $this->schemas = array();
     }
 
     /**
      * @param string $uri
-     * @return Common\ObjectInterface
+     * @return \Clarity\CdnBundle\Cdn\Common\ObjectInterface
      */
     public function get($uri)
     {
@@ -40,8 +49,8 @@ class CdnRegistry
     }
 
     /**
-     * @param  string $name
-     * @return Common\CdnInterface
+     * @param string $name
+     * @return \Clarity\CdnBundle\Cdn\Common\CdnInterface
      */
     public function getCdn($name = null)
     {
@@ -49,16 +58,20 @@ class CdnRegistry
             return $this->getDefaultCdn();
         }
 
-        if (!isset($this->storages[$name])) {
-            if (!isset($this->configuration['storage'][$name])) {
-                throw new Exception\ConfigurationNotFoundException($name);
-            }
-            $config = $this->configuration['storage'][$name];
-            $scheme = $this->scheme($config['scheme']);
-            $this->storages[$name] = new $scheme($config['path'], "$name://", $config['url']);
+        if (!$this->hasStorage($name)) {
+            $config = $this->getStorageConfiguration($name);
+
+            $storage = $this->createStorage(
+                $config['scheme'],
+                $config['path'],
+                "$name://",
+                $config['url']
+            );
+
+            $this->addStorage($name, $storage);
         }
 
-        return $this->storages[$name];
+        return $this->getStorage($name);
     }
 
     /**
@@ -69,6 +82,127 @@ class CdnRegistry
         $default = $this->configuration['default'];
 
         return $this->getCdn($default);
+    }
+
+    /**
+     * @param string $name
+     * @return boolean
+     */
+    public function hasStorage($name)
+    {
+        return array_key_exists($name, $this->storages);
+    }
+
+    /**
+     * @param string $name
+     * @param \Clarity\CdnBundle\Cdn\Common\CdnInterface $storage
+     *
+     * @return self
+     */
+    public function addStorage($name, $storage)
+    {
+        if ($this->hasStorage($name)) {
+            throw new Exception\StorageRedeclareException($name);
+        }
+
+        $this->storages[$name] = $storage;
+
+        return $this;
+    }
+
+    /**
+     * @param string $name
+     * @return \Clarity\CdnBundle\Cdn\Common\CdnInterface
+     */
+    public function getStorage($name)
+    {
+        if (!$this->hasStorage($name)) {
+            throw new Exception\StorageRedeclareException($name);
+        }
+
+        return $this->storages[$name];
+    }
+
+    /**
+     * @param string $name
+     * @return boolean
+     */
+    public function hasScheme($name)
+    {
+        return array_key_exists($name, $this->schemas);
+    }
+
+    /**
+     * @param string $name
+     * @throws Exception\ShemeRedeclareException
+     * @param string|\Symfony\Component\DependencyInjection\Reference $scheme
+     *
+     * @return self
+     */
+    public function addScheme($name, $scheme)
+    {
+        if ($this->hasScheme($name)) {
+            throw new Exception\ShemeRedeclareException($name);
+        }
+
+        $this->schemas[$name] = $scheme;
+
+        return $this;
+    }
+
+    /**
+     * @param string $name
+     * @throws Exception\SchemeNotFoundException
+     * @return string|\Symfony\Component\DependencyInjection\Reference
+     */
+    public function getScheme($name)
+    {
+        if (!$this->hasScheme($name)) {
+            throw new Exception\SchemeNotFoundException($name);
+        }
+
+        return $this->schemas[$name];
+    }
+
+    /**
+     * @param string $name
+     * @return array
+     */
+    private function getStorageConfiguration($name)
+    {
+        if (!array_key_exists($name, $this->configuration['storage'])) {
+            throw new Exception\ConfigurationNotFoundException($name);
+        }
+
+        return $this->configuration['storage'][$name];
+    }
+
+    /**
+     * @param string $name
+     * @param string $path
+     * @param string $uri
+     * @param string $http
+     * @throws Exception\SchemeNotFoundException
+     *
+     * @return \Clarity\CdnBundle\Cdn\Common\CdnInterface
+     */
+    private function createStorage($name, $path, $uri, $http)
+    {
+        $scheme = $this->getScheme($name);
+
+        if ($scheme instanceof Reference) {
+            $storage = $this->container->get($scheme);
+        } else {
+            $storage = new $scheme();
+        }
+
+        $storage
+            ->setPath($path)
+            ->setUri($uri)
+            ->setHttp($http)
+        ;
+
+        return $storage;
     }
 
     /**
@@ -88,19 +222,5 @@ class CdnRegistry
         $params['path'] = substr($params['path'], 1);
 
         return $params;
-    }
-
-    /**
-     * @param string $name
-     * @return string
-     * @throws Exception\InvalidSchemeException
-     */
-    private function scheme($name)
-    {
-        if (!isset($this->configuration['scheme'][$name])) {
-            throw new Exception\InvalidSchemeException($name);
-        }
-
-        return $this->configuration['scheme'][$name];
     }
 }

@@ -2,42 +2,15 @@
 
 namespace Clarity\CdnBundle\Cdn\Storage\Local;
 
-use Clarity\CdnBundle\Cdn\Common\CdnInterface;
+use Clarity\CdnBundle\Cdn\Storage\AbstractCdnStorage;
 
 /**
  * @author nikita prokurat <nickpro@tut.by>
  * @author Zmicier Aliakseyeu <z.aliakseyeu@gmail.com>
+ * @author varloc2000 <varloc2000@gmail.com>
  */
-class Cdn implements CdnInterface
+class Cdn extends AbstractCdnStorage
 {
-    /**
-     * @var string
-     */
-    private $path;
-
-    /**
-     * @var string
-     */
-    private $uri;
-
-    /**
-     * @var string http adress
-     */
-    private $http;
-
-    /**
-     * 
-     * @param string $path
-     * @param string $uri
-     * @param string $http http server address
-     */
-    public function __construct($path, $uri, $http)
-    {
-        $this->path = $path;
-        $this->uri = $uri;
-        $this->http = $http;
-    }
-
     /**
      * @param string $name
      * @return Container

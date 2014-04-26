@@ -73,7 +73,7 @@ class Container implements ContainerInterface
     {
         return $this->get($name)->remove();
     }
-    
+
     /**
      * 
      * @param UploadedFile $file

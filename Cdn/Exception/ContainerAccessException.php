@@ -7,7 +7,7 @@ namespace Clarity\CdnBundle\Cdn\Exception;
  */
 class ContainerAccessException extends \InvalidArgumentException
 {
-	/**
+    /**
      * @param string $name
      * @param string $path
      */
