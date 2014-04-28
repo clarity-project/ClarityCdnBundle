@@ -25,12 +25,6 @@ abstract class AbstractCdnStorage implements CdnInterface
     protected $http;
 
     /**
-     * @param string $name
-     * @return \Clarity\CdnBundle\Cdn\Common\ContainerInterface
-     */
-    abstract function container($name);
-
-    /**
      * @param string $path
      *
      * @return self
