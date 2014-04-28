@@ -181,7 +181,7 @@ use Acme\DemoBundle\Entity\Document;
                 /** @var \Clarity\CdnBundle\Cdn\Common\ObjectInterface $object **/
                 $object = $filemanager->upload(
                     $document->getFile(),
-                    'upload_here_subpath', // Not required sub directory to upload file in it, can be generated
+                    'upload_here_subpath', // Not required sub directory to upload file in it, set to null if you want save file without subdirectory
                     'uploaded_file_name' . '.' . $document->getFile()->getClientOriginalExtension() // Not required name for uploaded file (original filename used by default)
                 );
             } catch (FileException $e) {
@@ -202,7 +202,7 @@ use Acme\DemoBundle\Entity\Document;
 
 ### Get uploaded file web path (to use in img src or elsewhere...)
 
-Now you can get uploaded file web path by cdn scheme path, stored in entity property by using `clarity_cdn` or `clarity_cdn_safe` twig filter or with filemanager directly
+Now you can get uploaded file web path by cdn scheme path, stored in entity property by using `clarity_cdn` or `clarity_cdn_safe` twig functions or with filemanager directly
 
 #### Simple twig template example:
 
