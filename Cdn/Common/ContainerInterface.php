@@ -28,6 +28,4 @@ interface ContainerInterface
      * @return ObjectInterface
      */
     public function touch(UploadedFile $file, $name = null);
-
-    
 }

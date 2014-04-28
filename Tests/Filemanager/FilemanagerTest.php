@@ -26,7 +26,7 @@ class FilemanagerTest extends WebTestCase
         $this->fm = static::$kernel->getContainer()->get('clarity_cdn.filemanager');
         parent::setUp();
     }
-    
+
     public function testUpload()
     {
         $this->assertTrue(is_file(__DIR__ . '/' . self::$image));
@@ -34,14 +34,14 @@ class FilemanagerTest extends WebTestCase
         if (is_file(__DIR__ . '/' . self::$image)) {
 
             $image = new UploadedFile(
-                    __DIR__ . '/' . self::$image, 
-                    self::$imageName,
-                    null,
-                    filesize(__DIR__ . '/' . self::$image),
-                    UPLOAD_ERR_OK,
-                    true
+                __DIR__ . '/' . self::$image,
+                self::$imageName,
+                null,
+                filesize(__DIR__ . '/' . self::$image),
+                UPLOAD_ERR_OK,
+                true
             );
- 
+
             $this->assertEquals($image->getClientOriginalName(), self::$imageName);
             
             $object = $this->fm->upload($image);
@@ -56,16 +56,14 @@ class FilemanagerTest extends WebTestCase
             
             $this->assertFalse(is_file($this->fm->get($object->getUri())));
         }
-        
-        
     }
-    
+
     private function createGdImage()
     {
         try {
             $im = imagecreatetruecolor(100, 100);
             ob_start();
-                imagejpeg($im, NULL, 85);
+                imagejpeg($im, null, 85);
                 $contents = ob_get_contents();
             ob_end_clean();
 
@@ -81,8 +79,8 @@ class FilemanagerTest extends WebTestCase
             return false;
         }
     }
-    
-    public function tearDown() 
+
+    public function tearDown()
     {
         if (is_file(__DIR__ . '/' . self::$image)) {
             @unlink(__DIR__ . '/' . self::$image);
@@ -91,7 +89,3 @@ class FilemanagerTest extends WebTestCase
         parent::tearDown();
     }
 }
-
-
-
-

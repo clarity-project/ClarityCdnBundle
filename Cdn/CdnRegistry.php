@@ -199,8 +199,7 @@ class CdnRegistry
         $storage
             ->setPath($path)
             ->setUri($uri)
-            ->setHttp($http)
-        ;
+            ->setHttp($http);
 
         return $storage;
     }

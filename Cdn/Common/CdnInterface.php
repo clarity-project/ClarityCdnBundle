@@ -7,12 +7,12 @@ namespace Clarity\CdnBundle\Cdn\Common;
  * @author Zmicier Aliakseyeu <z.aliakseyeu@gmail.com>
  */
 interface CdnInterface
-{  
+{
     /**
      * Returns default or nedded container
      * 
      * @param string $name
      * @return ContainerInterface
-     */    
+     */
     public function container($name);
 }

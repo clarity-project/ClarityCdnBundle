@@ -202,14 +202,18 @@ use Acme\DemoBundle\Entity\Document;
 
 ### Get uploaded file web path (to use in img src or elsewhere...)
 
-Now you can get uploaded file web path by cdn scheme path, stored in entity property by using `clarity_cdn` twig filter or with filemanager directly
+Now you can get uploaded file web path by cdn scheme path, stored in entity property by using `clarity_cdn` or `clarity_cdn_safe` twig filter or with filemanager directly
 
 #### Simple twig template example:
 
 ``` twig
     ...
 
+    {# clarity_cdn will throw \Clarity\CdnBundle\Cdn\Exception\ObjectAccessException if can't find uploaded file by document.path or file not readeble #}
     <img class="thumbnail" src="{{ clarity_cdn(document.path|default('local://noavatar/noavatar.jpg')) }}" width="100" height="100" alt="avatar" title="avatar">
+
+    {# clarity_cdn_safe will return null if can't find uploaded file by document.path or file not readeble #}
+    <img class="thumbnail" src="{{ clarity_cdn_safe(document.path|default('local://noavatar/noavatar.jpg')) }}" width="100" height="100" alt="avatar" title="avatar">
 
     ...
 ```

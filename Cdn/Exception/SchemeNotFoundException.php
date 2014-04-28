@@ -7,7 +7,7 @@ namespace Clarity\CdnBundle\Cdn\Exception;
  */
 class SchemeNotFoundException extends \InvalidArgumentException
 {
-	/**
+    /**
      * @param string $name
      */
     public function __construct($name)

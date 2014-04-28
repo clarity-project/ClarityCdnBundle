@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @author nikita prokurat <nickpro@tut.by>
  * @author Zmicier Aliakseyeu <z.aliakseyeu@gmail.com>
  */
-interface ObjectInterface 
+interface ObjectInterface
 {
     /**
      * @return string

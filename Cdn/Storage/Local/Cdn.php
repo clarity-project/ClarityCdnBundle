@@ -15,7 +15,7 @@ class Cdn extends AbstractCdnStorage
      * @param string $name
      * @return Container
      */
-    public function container($name) 
+    public function container($name)
     {
         return new Container($name, $this->path, $this->uri, $this->http);
     }

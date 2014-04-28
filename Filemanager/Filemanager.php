@@ -7,7 +7,6 @@ use Clarity\CdnBundle\Cdn\CdnRegistry;
 use Clarity\CdnBundle\Cdn\Common\ObjectInterface;
 
 /**
- * 
  * @author nikita prokurat <nickpro@tut.by>
  * @author Zmicier Aliakseyeu <z.aliakseyeu@gmail.com>
  */

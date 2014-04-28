@@ -7,7 +7,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Clarity\CdnBundle\Cdn\Exception;
 
 /**
- * 
  * @author nikita prokurat <nickpro@tut.by>
  * @author Zmicier Aliakseyeu <z.aliakseyeu@gmail.com>
  */
@@ -39,12 +38,13 @@ class Container implements ContainerInterface
      * @param string $path
      * @param string $uri
      * @param string $http address of the server path
+     * @throws \Clarity\CdnBundle\Cdn\Exception\ContainerAccessException
      */
-    public function __construct($name, $path, $uri, $http) 
+    public function __construct($name, $path, $uri, $http)
     {
         $this->name = $name;
-        if (!is_dir($path.DIRECTORY_SEPARATOR.$name)) {
-            if (!mkdir($path.DIRECTORY_SEPARATOR.$name, 0777, true)) {
+        if (!is_dir($path . DIRECTORY_SEPARATOR . $name)) {
+            if (!mkdir($path . DIRECTORY_SEPARATOR . $name, 0777, true)) {
                 throw new Exception\ContainerAccessException($name, $path);
             }
         }
@@ -53,15 +53,15 @@ class Container implements ContainerInterface
             throw new Exception\ContainerAccessException($name, $path);
         }
 
-        $this->path = $path.DIRECTORY_SEPARATOR.$name;
-        $this->uri  = $uri.$name;
+        $this->path = $path . DIRECTORY_SEPARATOR . $name;
+        $this->uri  = $uri . $name;
         $this->http  = "{$http}/{$name}";
     }
 
     /**
      * {@inheritDoc}
      */
-    public function get($name) 
+    public function get($name)
     {
         return new Object($name, $this->path, $this->uri, $this->http);
     }

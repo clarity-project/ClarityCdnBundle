@@ -40,16 +40,17 @@ class Object implements ObjectInterface
      * @param string $path
      * @param string $uri
      * @param string $http
+     * @throws \Clarity\CdnBundle\Cdn\Exception\ObjectAccessException
      */
     public function __construct($name, $path, $uri, $http)
     {
         $this->name = $name;
 
-        if (!is_file($path.DIRECTORY_SEPARATOR.$name) || !is_readable($path.DIRECTORY_SEPARATOR.$name)) {
-            throw new Exception\ObjectAccessException($path.DIRECTORY_SEPARATOR.$name);
+        if (!is_file($path . DIRECTORY_SEPARATOR . $name) || !is_readable($path . DIRECTORY_SEPARATOR . $name)) {
+            throw new Exception\ObjectAccessException($path . DIRECTORY_SEPARATOR . $name);
         }
 
-        $this->path = $path.DIRECTORY_SEPARATOR.$name;
+        $this->path = $path . DIRECTORY_SEPARATOR . $name;
         $this->uri  = "{$uri}/{$name}";
         $this->http  = "{$http}/{$name}";
     }
@@ -100,7 +101,7 @@ class Object implements ObjectInterface
     public function getExtension()
     {
         if (null === $this->extension) {
-            $this->extension = substr($this->name, strrpos($this->name, '.')+1);
+            $this->extension = substr($this->name, strrpos($this->name, '.') + 1);
         }
 
         return $this->extension;

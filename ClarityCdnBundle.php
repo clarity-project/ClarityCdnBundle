@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  * @author Zmicier Aliakseyeu <z.aliakseyeu@gmail.com>
  */
 class ClarityCdnBundle extends Bundle
-{   
+{
     /**
      * {@inheritDoc}
      */

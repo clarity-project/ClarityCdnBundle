@@ -7,7 +7,7 @@ namespace Clarity\CdnBundle\Cdn\Exception;
  */
 class InvalidSchemeException extends \InvalidArgumentException
 {
-	/**
+    /**
      * @param string $name
      */
     public function __construct($name)
