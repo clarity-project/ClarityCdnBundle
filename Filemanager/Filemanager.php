@@ -30,10 +30,15 @@ class Filemanager
     /**
      * 
      * @param string $uri
+     * @param string $dimension
      * @return ObjectInterface
      */
     public function get($uri, $dimension = null)
     {
+        if (null !== $dimension) {
+            $uri = $this->addDimensionToName($uri, $dimension);
+        }
+
         return $this->registry->get($uri);
     }
     
