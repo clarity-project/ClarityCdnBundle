@@ -7,13 +7,14 @@ use Clarity\CdnBundle\Cdn\Exception;
 
 /**
  * @author Zmicier Aliakseyeu <z.aliakseyeu@gmail.com>
+ * @author varloc2000 <varloc2000@gmail.com>
  */
 class Object implements ObjectInterface
 {
     /**
      * @var string
      */
-    private $path;
+    private $fullPath;
 
     /**
      * @var string
@@ -23,12 +24,17 @@ class Object implements ObjectInterface
     /**
      * @var string
      */
-    private $uri;
+    private $schemaPath;
 
     /**
      * @var string
      */
-    private $http;
+    private $webPath;
+
+    /**
+     * @var string
+     */
+    private $container;
 
     /**
      * @var string
@@ -37,22 +43,37 @@ class Object implements ObjectInterface
 
     /**
      * @param string $name
-     * @param string $path
-     * @param string $uri
-     * @param string $http
+     * @param string $fullPath
+     * @param string $schema
+     * @param string $webPath
      * @throws \Clarity\CdnBundle\Cdn\Exception\ObjectAccessException
      */
-    public function __construct($name, $path, $uri, $http)
+    public function __construct($name, $fullPath, $schema, $webPath)
     {
         $this->name = $name;
 
-        if (!is_file($path . DIRECTORY_SEPARATOR . $name) || !is_readable($path . DIRECTORY_SEPARATOR . $name)) {
-            throw new Exception\ObjectAccessException($path . DIRECTORY_SEPARATOR . $name);
+        if (!is_file($fullPath . DIRECTORY_SEPARATOR . $name) || !is_readable($fullPath . DIRECTORY_SEPARATOR . $name)) {
+            throw new Exception\ObjectAccessException($fullPath . DIRECTORY_SEPARATOR . $name);
         }
 
-        $this->path = $path . DIRECTORY_SEPARATOR . $name;
-        $this->uri  = "{$uri}/{$name}";
-        $this->http  = "{$http}/{$name}";
+        list($scheme, $container) = explode('://', $schema);
+
+        $this->container    = $container . DIRECTORY_SEPARATOR . $name;
+        $this->fullPath     = $fullPath . DIRECTORY_SEPARATOR . $name;
+        $this->schemaPath   = "{$schema}/{$name}";
+        $this->webPath      = "{$webPath}/{$name}";
+
+        /*
+         * @var string $basePathDelimiter "../web" string to find relative path
+         */
+        $basePathDelimiter = '..' . DIRECTORY_SEPARATOR . 'web';
+        $this->relativePath = substr(
+            $this->fullPath,
+            strrpos(
+                $this->fullPath,
+                $basePathDelimiter
+            ) + strlen($basePathDelimiter)
+        );
     }
 
     /**
@@ -60,31 +81,47 @@ class Object implements ObjectInterface
      */
     public function __toString()
     {
-        return (string) $this->http;
+        return (string) $this->webPath;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getUri()
+    public function getSchemaPath()
     {
-        return $this->uri;
+        return $this->schemaPath;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getHttpUri()
+    public function getWebPath()
     {
-        return $this->http;
+        return $this->webPath;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getPath()
+    public function getFullPath()
     {
-        return $this->path;
+        return $this->fullPath;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getRelativePath()
+    {
+        return $this->relativePath;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getContainer()
+    {
+        return $this->container;
     }
 
     /**
@@ -112,7 +149,7 @@ class Object implements ObjectInterface
      */
     public function remove()
     {
-        if (unlink($this->path)) {
+        if (unlink($this->fullPath)) {
             return true;
         }
 

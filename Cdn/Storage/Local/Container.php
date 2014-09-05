@@ -2,13 +2,14 @@
 
 namespace Clarity\CdnBundle\Cdn\Storage\Local;
 
-use Clarity\CdnBundle\Cdn\Common\ContainerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Clarity\CdnBundle\Cdn\Common\ContainerInterface;
 use Clarity\CdnBundle\Cdn\Exception;
 
 /**
  * @author nikita prokurat <nickpro@tut.by>
  * @author Zmicier Aliakseyeu <z.aliakseyeu@gmail.com>
+ * @author varloc2000 <varloc2000@gmail.com>
  */
 class Container implements ContainerInterface
 {
@@ -20,42 +21,42 @@ class Container implements ContainerInterface
     /**
      * @var string
      */
-    private $path;
+    private $fullPath;
 
     /**
      * @var string
      */
-    private $uri;
+    private $schema;
 
     /**
-     * @var string http address
+     * @var string
      */
-    private $http;
+    private $webPath;
 
     /**
      * 
      * @param string $name
-     * @param string $path
-     * @param string $uri
-     * @param string $http address of the server path
+     * @param string $fullPath
+     * @param string $schemaPrefix
+     * @param string $webPath
      * @throws \Clarity\CdnBundle\Cdn\Exception\ContainerAccessException
      */
-    public function __construct($name, $path, $uri, $http)
+    public function __construct($name, $fullPath, $schemaPrefix, $webPath)
     {
         $this->name = $name;
-        if (!is_dir($path . DIRECTORY_SEPARATOR . $name)) {
-            if (!mkdir($path . DIRECTORY_SEPARATOR . $name, 0777, true)) {
-                throw new Exception\ContainerAccessException($name, $path);
+        if (!is_dir($fullPath . DIRECTORY_SEPARATOR . $name)) {
+            if (!mkdir($fullPath . DIRECTORY_SEPARATOR . $name, 0777, true)) {
+                throw new Exception\ContainerAccessException($name, $fullPath);
             }
         }
         
-        if (!is_writable($path.DIRECTORY_SEPARATOR.$name)) {
-            throw new Exception\ContainerAccessException($name, $path);
+        if (!is_writable($fullPath . DIRECTORY_SEPARATOR . $name)) {
+            throw new Exception\ContainerAccessException($name, $fullPath);
         }
 
-        $this->path = $path . DIRECTORY_SEPARATOR . $name;
-        $this->uri  = $uri . $name;
-        $this->http  = "{$http}/{$name}";
+        $this->fullPath = $fullPath . DIRECTORY_SEPARATOR . $name;
+        $this->schema   = $schemaPrefix . $name;
+        $this->webPath  = "{$webPath}/{$name}";
     }
 
     /**
@@ -63,7 +64,7 @@ class Container implements ContainerInterface
      */
     public function get($name)
     {
-        return new Object($name, $this->path, $this->uri, $this->http);
+        return new Object($name, $this->fullPath, $this->schema, $this->webPath);
     }
 
     /**
@@ -75,15 +76,12 @@ class Container implements ContainerInterface
     }
 
     /**
-     * 
-     * @param UploadedFile $file
-     * @param string $name custom file name
-     * @return ObjectInterface
+     * {@inheritDoc}
      */
     public function touch(UploadedFile $file, $name = null)
     {
         $name = (null === $name) ? $file->getClientOriginalName() : $name;
-        $file->move($this->path, $name);
+        $file->move($this->fullPath, $name);
         
         return $this->get($name);
     }

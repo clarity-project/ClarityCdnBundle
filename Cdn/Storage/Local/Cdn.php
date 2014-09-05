@@ -12,11 +12,10 @@ use Clarity\CdnBundle\Cdn\Storage\AbstractCdnStorage;
 class Cdn extends AbstractCdnStorage
 {
     /**
-     * @param string $name
-     * @return Container
+     * {@inheritDoc}
      */
     public function container($name)
     {
-        return new Container($name, $this->path, $this->uri, $this->http);
+        return new Container($name, $this->fullPath, $this->schemaPrefix, $this->webPath);
     }
 }

@@ -1,17 +1,20 @@
 <?php
+
 namespace Clarity\CdnBundle\Tests\Filemanager;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Clarity\CdnBundle\Filemanager\Filemanager;
-use Clarity\CdnBundle\Filemanager\Storage\Local\Container;
 
 /**
  * @author nikita prokurat <nickpro@tut.by>
+ * @author varloc2000 <varloc2000@gmail.com>
  */
 class FilemanagerTest extends WebTestCase
 {
-    /** @var Filemanager */
+    /**
+     * @var Filemanager
+     */
     private $fm;
     private static $image = 'testimage.png';
     private static $imageName = 'test_image_name';
@@ -44,17 +47,17 @@ class FilemanagerTest extends WebTestCase
 
             $this->assertEquals($image->getClientOriginalName(), self::$imageName);
             
-            $object = $this->fm->upload($image);
+            $object = $this->fm->upload($image, 'cdn_test');
             
-            $this->assertTrue(is_file($object->getPath()));
-            $this->assertTrue(is_readable($object->getPath()));
-            $this->assertEquals($object->getUri(), "image://".Container::$defaultContainer."/".self::$image);
+            $this->assertTrue(is_file($object->getFullPath()));
+            $this->assertTrue(is_readable($object->getFullPath()));
+            $this->assertEquals($object->getSchemaPath(), "image://cdn_test/" . self::$image);
             
-            $this->assertTrue(is_file($this->fm->get($object->getUri())->getPath()));
+            $this->assertTrue(is_file($this->fm->get($object->getSchemaPath())->getFullPath()));
             
-            $this->fm->remove($object->getUri());
+            $this->fm->remove($object->getSchemaPath());
             
-            $this->assertFalse(is_file($this->fm->get($object->getUri())));
+            $this->assertFalse(is_file($this->fm->get($object->getSchemaPath())));
         }
     }
 

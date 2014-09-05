@@ -35,19 +35,19 @@ class SchemePass implements CompilerPassInterface
         if (!isset($config['scheme'])) {
             $config['scheme'] = array();
         } else {
-            foreach ($config['scheme'] as $schemeName => $sheme) {
-                if (!$container->has($sheme) && !class_exists($sheme)) {
-                    throw new StorageConfigurationException($schemeName, $sheme);
-                } else if ($container->has($sheme)) {
-                    $sheme = new Reference($sheme);
+            foreach ($config['scheme'] as $schemeName => $scheme) {
+                if (!$container->has($scheme) && !class_exists($scheme)) {
+                    throw new StorageConfigurationException($schemeName, $scheme);
+                } else if ($container->has($scheme)) {
+                    $scheme = new Reference($scheme);
                 }
 
-                $definition->addMethodCall('addScheme', array($schemeName, $sheme));
+                $definition->addMethodCall('addScheme', array($schemeName, $scheme));
             }
         }
 
-        foreach ($this->defaultSchemas as $schemeName => $sheme) {
-            $definition->addMethodCall('addScheme', array($schemeName, $sheme));
+        foreach ($this->defaultSchemas as $schemeName => $scheme) {
+            $definition->addMethodCall('addScheme', array($schemeName, $scheme));
         }
     }
 }

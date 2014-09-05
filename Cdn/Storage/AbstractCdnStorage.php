@@ -10,52 +10,46 @@ use Clarity\CdnBundle\Cdn\Common\CdnInterface;
 abstract class AbstractCdnStorage implements CdnInterface
 {
     /**
-     * @var string
+     * @var string full path to uploads
      */
-    protected $path;
+    protected $fullPath;
 
     /**
      * @var string
      */
-    protected $uri;
+    protected $schemaPrefix;
 
     /**
-     * @var string http adress
+     * @var string web path to uploads
      */
-    protected $http;
+    protected $webPath;
 
     /**
-     * @param string $path
-     *
-     * @return self
+     * {@inheritDoc}
      */
-    public function setPath($path)
+    public function setFullPath($fullPath)
     {
-        $this->path = $path;
+        $this->fullPath = $fullPath;
 
         return $this;
     }
 
     /**
-     * @param string $uri
-     *
-     * @return self
+     * {@inheritDoc}
      */
-    public function setUri($uri)
+    public function setSchemaPrefix($schemaPrefix)
     {
-        $this->uri = $uri;
+        $this->schemaPrefix = $schemaPrefix;
 
         return $this;
     }
 
     /**
-     * @param string $http
-     *
-     * @return self
+     * {@inheritDoc}
      */
-    public function setHttp($http)
+    public function setWebPath($webPath)
     {
-        $this->http = $http;
+        $this->webPath = $webPath;
 
         return $this;
     }

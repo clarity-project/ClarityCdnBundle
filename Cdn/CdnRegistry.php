@@ -2,13 +2,14 @@
 
 namespace Clarity\CdnBundle\Cdn;
 
+use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * @author Zmicier Aliakseyeu <z.aliakseyeu@gmail.com>
  * @author varloc2000 <varloc2000@gmail.com>
  */
-class CdnRegistry
+class CdnRegistry extends ContainerAware
 {
     /**
      * @var array
@@ -96,7 +97,7 @@ class CdnRegistry
     /**
      * @param string $name
      * @param \Clarity\CdnBundle\Cdn\Common\CdnInterface $storage
-     *
+     * @throws Exception\StorageRedeclareException
      * @return self
      */
     public function addStorage($name, $storage)
@@ -112,6 +113,7 @@ class CdnRegistry
 
     /**
      * @param string $name
+     * @throws Exception\StorageRedeclareException
      * @return \Clarity\CdnBundle\Cdn\Common\CdnInterface
      */
     public function getStorage($name)
@@ -166,6 +168,7 @@ class CdnRegistry
 
     /**
      * @param string $name
+     * @throws Exception\ConfigurationNotFoundException
      * @return array
      */
     private function getStorageConfiguration($name)
@@ -179,35 +182,38 @@ class CdnRegistry
 
     /**
      * @param string $name
-     * @param string $path
-     * @param string $uri
-     * @param string $http
+     * @param string $fullPath
+     * @param string $schemaPrefix
+     * @param string $webPath
      * @throws Exception\SchemeNotFoundException
      *
      * @return \Clarity\CdnBundle\Cdn\Common\CdnInterface
      */
-    private function createStorage($name, $path, $uri, $http)
+    private function createStorage($name, $fullPath, $schemaPrefix, $webPath)
     {
         $scheme = $this->getScheme($name);
 
         if ($scheme instanceof Reference) {
+            /** @var \Clarity\CdnBundle\Cdn\Common\CdnInterface $storage */
             $storage = $this->container->get($scheme);
         } else {
+            /** @var \Clarity\CdnBundle\Cdn\Common\CdnInterface $storage */
             $storage = new $scheme();
         }
 
         $storage
-            ->setPath($path)
-            ->setUri($uri)
-            ->setHttp($http);
+            ->setFullPath($fullPath)
+            ->setSchemaPrefix($schemaPrefix)
+            ->setWebPath($webPath);
 
         return $storage;
     }
 
     /**
      * Parsing uri and return array of uri data
-     * 
+     *
      * @param string $uri
+     * @throws Exception\InvalidUriException
      * @return array
      */
     private function parse($uri)

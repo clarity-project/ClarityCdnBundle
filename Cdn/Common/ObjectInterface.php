@@ -2,7 +2,6 @@
 
 namespace Clarity\CdnBundle\Cdn\Common;
 
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * @author nikita prokurat <nickpro@tut.by>
@@ -13,17 +12,27 @@ interface ObjectInterface
     /**
      * @return string
      */
-    public function getUri();
+    public function getSchemaPath();
 
     /**
      * @return string
      */
-    public function getHttpUri();
+    public function getWebPath();
 
     /**
      * @return string
      */
-    public function getPath();
+    public function getFullPath();
+
+    /**
+     * @return string
+     */
+    public function getRelativePath();
+
+    /**
+     * @return string
+     */
+    public function getContainer();
 
     /**
      * @return string
