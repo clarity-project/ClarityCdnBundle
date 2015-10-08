@@ -56,7 +56,7 @@ class Object implements ObjectInterface
             throw new Exception\ObjectAccessException($fullPath . DIRECTORY_SEPARATOR . $name);
         }
 
-        list($scheme, $container) = explode('://', $schema);
+        list(, $container) = explode('://', $schema);
 
         $this->container    = $container . DIRECTORY_SEPARATOR . $name;
         $this->fullPath     = $fullPath . DIRECTORY_SEPARATOR . $name;

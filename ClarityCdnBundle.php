@@ -4,7 +4,6 @@ namespace Clarity\CdnBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Clarity\CdnBundle\DependencyInjection\Compiler\SchemePass;
-use Clarity\CdnBundle\DependencyInjection\Compiler\RegistryPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**

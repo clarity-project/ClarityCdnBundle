@@ -2,7 +2,6 @@
 
 namespace Clarity\CdnBundle\Twig\Extension;
 
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Clarity\CdnBundle\Cdn\Exception;
 use Clarity\CdnBundle\Filemanager\Filemanager;
 

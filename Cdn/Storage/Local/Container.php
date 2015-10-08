@@ -16,11 +16,6 @@ class Container implements ContainerInterface
     /**
      * @var string
      */
-    private $name;
-
-    /**
-     * @var string
-     */
     private $fullPath;
 
     /**
@@ -43,7 +38,6 @@ class Container implements ContainerInterface
      */
     public function __construct($name, $fullPath, $schemaPrefix, $webPath)
     {
-        $this->name = $name;
         if (!is_dir($fullPath . DIRECTORY_SEPARATOR . $name)) {
             if (!mkdir($fullPath . DIRECTORY_SEPARATOR . $name, 0777, true)) {
                 throw new Exception\ContainerAccessException($name, $fullPath);
