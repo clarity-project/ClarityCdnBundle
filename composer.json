@@ -1,7 +1,8 @@
 {
     "name": "clarity-project/cdn-bundle",
     "description": "Symfony2 bundle for file storage on local or remote cdn",
-    "keywords": ["cdn", "php", "symfony", "symfony2", "filemanager", "file", "upload", "storage", "container"],
+    "keywords": ["cdn", "php", "symfony", "symfony2"],
+    "type": "symfony-bundle",
     "license": "MIT",
     "authors": [
         {
@@ -12,23 +13,18 @@
             "name": "Nikita Prokurat",
             "email": "nickpro@tut.by"
         }
-    ],
-     
+    ],     
     "require": {
         "php": ">=5.3.2",
         "symfony/framework-bundle": "~2.2",
-        "symfony/symfony": "~2.1"
+        "symfony/symfony": "~2.3"
     },
-
     "require-dev": {
         "phpunit/phpunit": "~3.7"
     },
-
     "autoload": {
-        "psr-0": {
-            "Clarity\\CdnBundle": ""
+        "psr-4": {
+            "Clarity\\CdnBundle\\": ""
         }
-    },
-
-    "target-dir": "Clarity/CdnBundle"
+    }
 }
