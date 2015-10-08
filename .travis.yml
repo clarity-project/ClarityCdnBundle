@@ -11,7 +11,7 @@ before_install:
     - composer self-update
 
 install: 
-    - composer install --dev --prefer-source
+    - composer update
 
 script:
     - phpunit -v
