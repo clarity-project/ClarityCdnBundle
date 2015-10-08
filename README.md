@@ -1,6 +1,6 @@
 ClarityCdnBundle
 ================
-
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/70320896-61a8-42c9-86ce-d39aa43fa230/mini.png)](https://insight.sensiolabs.com/projects/70320896-61a8-42c9-86ce-d39aa43fa230)
 ### What is this?
 
 ClarityCdnBundle is a implementation of Content Delivery Network way to store your media data.
