@@ -2,15 +2,18 @@
 
 namespace Clarity\CdnBundle\Cdn;
 
-use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * @author Zmicier Aliakseyeu <z.aliakseyeu@gmail.com>
  * @author varloc2000 <varloc2000@gmail.com>
  */
-class CdnRegistry extends ContainerAware
+class CdnRegistry implements ContainerAwareInterface
 {
+    use ContainerAwareTrait;
+
     /**
      * @var array
      */

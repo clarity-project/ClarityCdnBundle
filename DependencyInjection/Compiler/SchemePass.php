@@ -38,7 +38,9 @@ class SchemePass implements CompilerPassInterface
             foreach ($config['scheme'] as $schemeName => $scheme) {
                 if (!$container->has($scheme) && !class_exists($scheme)) {
                     throw new StorageConfigurationException($schemeName, $scheme);
-                } else if ($container->has($scheme)) {
+                }
+
+                if ($container->has($scheme)) {
                     $scheme = new Reference($scheme);
                 }
 
