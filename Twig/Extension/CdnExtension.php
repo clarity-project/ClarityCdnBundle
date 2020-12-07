@@ -7,7 +7,7 @@ use Clarity\CdnBundle\Filemanager\Filemanager;
 
 /**
  * Twig extension for easy access to cdn objects from view
- * 
+ *
  * @author nikita prokurat <nickpro@tut.by>
  * @author Zmicier Aliakseyeu <z.aliakseyeu@gmail.com>
  * @author varloc2000 <varloc2000@gmail.com>
@@ -21,7 +21,7 @@ class CdnExtension extends \Twig_Extension
 
     /**
      * Constructor
-     * 
+     *
      * @param Clarity\CdnBundle\Filemanager\Filemanager $filemanager
      */
     public function __construct(Filemanager $filemanager)
@@ -35,8 +35,8 @@ class CdnExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'clarity_cdn' => new \Twig_Function_Method($this, 'getImage'),
-            'clarity_cdn_safe' => new \Twig_Function_Method($this, 'getImageSafe')
+            new \Twig_SimpleFunction('clarity_cdn', [$this, 'getImage']),
+            new \Twig_SimpleFunction('clarity_cdn_safe', [$this, 'getImageSafe']),
         );
     }
 

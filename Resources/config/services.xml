@@ -14,14 +14,14 @@
         <service id="clarity_cdn.registry" class="%clarity_cdn.registry.class%">
             <argument>%clarity_cdn%</argument>
         </service>
-        
+
         <service id="clarity_cdn.filemanager" class="%clarity_cdn.filemanager.class%">
             <argument type="service" id="clarity_cdn.registry" />
         </service>
-        
+
         <service id="cdn" class="%clarity_cdn.twig_extension%">
             <tag name="twig.extension" />
             <argument type="service" id="clarity_cdn.filemanager"/>
-        </service>        
+        </service>
     </services>
 </container>
